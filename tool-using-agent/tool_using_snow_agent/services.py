@@ -48,7 +48,9 @@ def geocode_location(query: str) -> dict | None:
     """Geocode a location using Nominatim (OpenStreetMap).
     
     Uses polygon_geojson=1 to get the actual polygon when available.
-    Falls back to expanding bbox if only a point is returned.
+    Uses the polygon directly when Nominatim returns a Polygon or MultiPolygon;
+    for point/line results, falls back to expanding the bbox to a minimum size
+    for adequate MODIS coverage.
     """
     try:
         url = "https://nominatim.openstreetmap.org/search"
@@ -70,23 +72,23 @@ def geocode_location(query: str) -> dict | None:
         result = results[0]
         
         # bbox from Nominatim: [min_lat, max_lat, min_lon, max_lon]
-        bbox = [
+        raw_bbox = [
             float(result["boundingbox"][2]),  # min_lon
             float(result["boundingbox"][0]),  # min_lat
             float(result["boundingbox"][3]),  # max_lon
             float(result["boundingbox"][1]),  # max_lat
         ]
         
-        # Ensure minimum bbox size for MODIS coverage
-        bbox = _ensure_min_bbox(bbox)
-        
-        # Use GeoJSON polygon if available, otherwise center point
+        # Use the Nominatim polygon directly when available; otherwise buffer
         geojson = result.get("geojson")
-        if geojson and geojson.get("type") == "Polygon":
+        if geojson and geojson.get("type") in {"Polygon", "MultiPolygon"}:
+            bbox = raw_bbox
             geometry = geojson
         else:
-            center_lon = (bbox[0] + bbox[2]) / 2
-            center_lat = (bbox[1] + bbox[3]) / 2
+            # Expand small point/line bboxes to ensure adequate MODIS coverage
+            bbox = _ensure_min_bbox(raw_bbox)
+            center_lon = (raw_bbox[0] + raw_bbox[2]) / 2
+            center_lat = (raw_bbox[1] + raw_bbox[3]) / 2
             geometry = {
                 "type": "Point",
                 "coordinates": [center_lon, center_lat]
