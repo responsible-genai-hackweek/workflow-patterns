@@ -14,7 +14,7 @@ from .responses import get_response, build_tool_response, ResponseStatus
 
 STAC_API_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
 
-# Minimum bbox size in degrees (~5km) to ensure adequate MODIS coverage
+# Minimum bbox size in degrees (~50km) to ensure adequate MODIS coverage
 MIN_BBOX_SIZE = 0.5
 
 
