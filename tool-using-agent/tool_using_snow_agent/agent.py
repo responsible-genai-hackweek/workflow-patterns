@@ -47,7 +47,12 @@ WORKFLOW:
 1. Call get_location AND set_date_range in parallel (both at the same time)
 2. Output date range result first, then location confirmation
 3. Wait for user confirmation on location
-4. Run analysis"""
+4. Run analysis
+
+MISSING INFO RULES:
+- If location is missing, respond EXACTLY: "I need a location to proceed. Please provide a place name."
+- If date is missing, respond EXACTLY: "I need a date range to proceed. Please provide start and end dates."
+- Do NOT add extra text or rephrase these messages."""
 
 
 tools = [get_location, set_date_range, run_analysis]
