@@ -78,7 +78,7 @@ Followed by:
 We can see the skills and agents that have been installed in our plugin by running `/plugin` from claude. Let's do that now.
 
 Let's take a closer look at one of the skills that makes up the RPI workflow:
-[research-codebase](https://github.com/jeffh/claude-plugins/blob/main/humanlayer/commands/research_codebase.md)
+- [research-codebase](https://github.com/jeffh/claude-plugins/blob/main/humanlayer/commands/research_codebase.md)
 
 ---
 
