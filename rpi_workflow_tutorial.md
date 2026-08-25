@@ -16,7 +16,7 @@ By the end of this episode, you will be able to:
 
 ## Attribution
 
-The `/research_codebase`, `/create_plan`, `/implement_plan`, and `/validate_plan` commands used in this tutorial originate from [HumanLayer](https://github.com/humanlayer/humanlayer), who developed the RPI workflow as part of their public work on context engineering for coding agents. Yesterday, Anthony, Don, and Joe taught us about the concept of context engineering, which is the practice of deliberately designing and managing the full dynamic information environment an LLM sees at runtime (i.e. the mix of tools, history, memory, agents, and retrieved data) rather than letting the context window accumulate anything that a conversation happens to produce. 
+The `/research_codebase`, `/create_plan`, `/implement_plan`, and `/validate_plan` commands used in this tutorial originate from [HumanLayer](https://github.com/humanlayer/humanlayer), who developed the RPI workflow as part of their public work on context engineering for coding agents. Yesterday, Anthony Arendt, Don Setiawan, and Joe Meyer taught us about the concept of context engineering, which is the practice of deliberately designing and managing the full dynamic information environment an LLM sees at runtime (i.e. the mix of tools, history, memory, agents, and retrieved data) rather than letting the context window accumulate anything that a conversation happens to produce. 
 
 We're installing a repackaged, plugin-installable version of the `humanlayer` command set maintained by [jeffh/claude-plugins](https://github.com/jeffh/claude-plugins). If this workflow is useful to you, I recommend checking out HumanLayer's [documentation](https://docs.humanlayer.com/explanation/workflow-phases) and [media](https://thehumansintheloop.substack.com/p/making-agents-mainstream-for-dev-with-dexter-horthy) on context engineering.
 
@@ -24,7 +24,7 @@ We're installing a repackaged, plugin-installable version of the `humanlayer` co
 
 ## Part 1: Background concepts
 
-We're going to test the Research > Plan > Implement workflow that JP taught us about earlier on the [`earthaccess`](https://github.com/earthaccess-dev/earthaccess) codebase. Let's start by cloning a local copy of `earthaccess` from GitHub:
+We're going to test the Research > Plan > Implement workflow that JP Swinski taught us about earlier on the [`earthaccess`](https://github.com/earthaccess-dev/earthaccess) codebase. Let's start by cloning a local copy of `earthaccess` from GitHub:
 ```bash
 git clone https://github.com/earthaccess-dev/earthaccess.git
 ```
@@ -46,8 +46,8 @@ claude code's main session operates as one agent. When that main agent needs to 
 The main agent never sees the sub-agent's intermediate work and only receives its final report. This is precisely the power of the research phase in RPI. Doing many tasks from the main agent clutters the main context window, which grows fuller with each subsequent task. Instead in the research phase of RPI, we instruct the main agent to spawn several sub-agents to index the codebase in parallel, with each specializing in particular tasks. After their tasks are complete, each agent returns a condensed summary rather than flooding the main conversation, and therefore the main context, with every file it read.
 
 Let's take a closer look at a couple of these specialized research agents:
-[codebase-analyzer](https://github.com/jeffh/claude-plugins/blob/main/humanlayer/agents/codebase-analyzer.md)
-[codebase-locator](https://github.com/jeffh/claude-plugins/blob/main/humanlayer/agents/codebase-locator.md)
+- [codebase-analyzer](https://github.com/jeffh/claude-plugins/blob/main/humanlayer/agents/codebase-analyzer.md)
+- [codebase-locator](https://github.com/jeffh/claude-plugins/blob/main/humanlayer/agents/codebase-locator.md)
 
 Let's open claude code and take a closer look at our context. From the terminal run:
 ```bash
@@ -61,7 +61,7 @@ Now that you're in claude code, run the following command:
 
 ### What is a command?
 
-A **command** (also called a **skill**) is a stored, reusable prompt, saved as a markdown file, that you invoke by typing `/command-name`. Yesterday, Joe showed us how to build our first skill, and how to see our skills listed in claude. Today we're going to use the research (`/research_codebase`), plan (`/create_plan`), and implement (`/implement_plan`) skills (or commands) from RPI. When RPI was created, these operators were still called commands, but the more accepted terminology today is skill or agent skill.
+A **command** (also called a **skill**) is a stored, reusable prompt, saved as a markdown file, that you invoke by typing `/command-name`. Yesterday, Joe Meyer showed us how to build our first skill, and how to see our skills listed in claude. Today we're going to use the research (`/research_codebase`), plan (`/create_plan`), and implement (`/implement_plan`) skills (or commands) from RPI. When RPI was created, these operators were still called commands, but the more accepted terminology today is skill or agent skill.
 
 Let's import these skills and their associated agents from Claude's plugin marketplace. 
 
@@ -100,7 +100,7 @@ Two RPI design choices are worth calling out explicitly:
 
 ### Why do we need subagents?
 
-For small, well-scoped problems, RPI's structure often isn't worth the overhead. Lilly gave us a great tutorial on how to create an agent for these kinds of tasks before lunch. The case for RPI is specifically to facilitate success when working with large, complex, or unfamiliar codebases. Why? 
+For contained, well-scoped problems, RPI's structure usually isn't worth the overhead. Lilly Thomas gave us a great tutorial on how to create an agent for these kinds of tasks before lunch. The case for RPI is specifically to facilitate success when working with large, complex, or unfamiliar codebases. Why? 
 
 First, a coding agent's output at any step is a function of its current context window and nothing else. That window is "the only lever you have to affect the quality of your output" (Dex Horthy, HumanLayer, [Advanced Context Engineering for Coding Agents](https://www.humanlayer.dev/blog/advanced-context-engineering)). Unstructured prompting tends to lose control of that lever as a task grows, filling the context window with information that isn't necessarily relevant and which competes equally with any information in the context window that ***is*** relevant. 
 
@@ -261,7 +261,7 @@ This was a more complex issue than we solved before, which required more researc
 
 In the previous two examples, we implemented RPI to *modify* existing code in response to known issues. RPI can also be used to build new code or features. In this section, we're going to try designing and building a new `earthaccess` feature from scratch, where the spec becomes our own request rather than a pre-existing GitHub issue.
 
-We're going to ask claude to build an **MCP server** for `earthaccess`. As Jason and Joe taught us earlier today, MCP (the Model Context Protocol) is the open protocol that claude code uses to expose tools to a model. MCPs use the same underlying idea behind the sub-agents dispatched by `/research_codebase` and the plugin commands you installed above, generalized into a standard interface that any tool can implement. An MCP server for `earthaccess` would allow an LLM agent to call functions like "search for a dataset" or "download this data" as structured tool calls, rather than relying on generated shell commands. 
+We're going to ask claude to build an **MCP server** for `earthaccess`. As Joe Hamman and Jason Gilman taught us earlier today, MCP (the Model Context Protocol) is the open protocol that claude code uses to expose tools to a model. MCPs use the same underlying idea behind the sub-agents dispatched by `/research_codebase` and the plugin commands you installed above, generalized into a standard interface that any tool can implement. An MCP server for `earthaccess` would allow an LLM agent to call functions like "search for a dataset" or "download this data" as structured tool calls, rather than relying on generated shell commands. 
 
 This is exactly the kind of task where having a human in the loop for research and planning matters most. RPI becomes a very powerful tool in this case because it allows us as the users to guide the research and planning alongside claude. We start the workflow the same as above:
 
