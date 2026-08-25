@@ -1,0 +1,19 @@
+[project]
+name = "tool-use-agent"
+version = "0.1.0"
+description = "Tutorial notebook demonstrating a tool using agent"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain-anthropic>=0.3.0",
+    "langchain-core>=0.3.0",
+    "numpy>=1.26.0",
+    "requests>=2.31.0",
+    "rioxarray>=0.15.0",
+    "planetary-computer>=0.5.0",
+    "pandas>=2.0.0",
+    "jupyterlab>=4.0.0",
+    "ipykernel>=6.0.0",
+    "jupyter-ai>=3.0.0",  # AI assistant in JupyterLab
+]
