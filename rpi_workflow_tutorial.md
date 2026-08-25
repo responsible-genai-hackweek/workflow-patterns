@@ -311,3 +311,4 @@ python -u earthaccess_mcp.py
   Dex Horthy's original write-up on frequent intentional compaction and the RPI workflow
 - [HumanLayer](https://github.com/humanlayer/humanlayer): origin of the RPI command set and the context-engineering ideas behind it
 - [`humanlayer` on npm](https://www.npmjs.com/package/humanlayer): CLI reference for the `thoughts` tool, including profiles and syncing
+- [UW SSEC's AI Research Workflows](https://github.com/uw-ssec/rse-plugins/tree/main/plugins/ai-research-workflows): SSEC's extensions of RPI and other recommended workflows to apply better in research software settings
